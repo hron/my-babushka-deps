@@ -3,10 +3,13 @@ dep 'gitolite', :template => 'managed' do
     via :apt, %w(gitolite)
   }
 
+
   met? {
-    return false
+    File.exist?('/var/lib/gitolite/.gitolite.rc')
   }
+
   meet {
     pkg_manager.install! installs
+    shell('dpkg-reconfigure -f readline gitolite', :sudo => true)
   }
 end
